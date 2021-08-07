@@ -5,6 +5,8 @@ using UnityEngine;
 public class enemy_controller : MonoBehaviour
 {
     Player enemy;
+    public float speed, maxSpeed, jumpPower;
+
     GameObject player;
 
     Rigidbody2D rb;
@@ -12,7 +14,7 @@ public class enemy_controller : MonoBehaviour
     float horizontal;
     void Start()
     {
-        enemy = new Player(7f, 1.2f, 2.3f);
+        enemy = new Player(speed, maxSpeed, jumpPower);
         player = GameObject.Find("player");
 
         rb = this.GetComponent<Rigidbody2D>();
@@ -25,8 +27,13 @@ public class enemy_controller : MonoBehaviour
         move = new Vector2(move.x, rb.velocity.y);
 
         horizontal = Mathf.Sign(player.transform.position.x - transform.position.x);
+        
+        if(Mathf.Abs(player.transform.position.x - transform.position.x) < 0.05f)
+        {
+            horizontal = 0;
+        }
 
-        if (horizontal != 0)
+        if (horizontal != 0 && move.x < enemy.maxSpeed)
         {
             move += new Vector2(horizontal * enemy.speed * Time.deltaTime, 0);
 

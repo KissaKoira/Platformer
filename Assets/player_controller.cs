@@ -10,12 +10,18 @@ public class player_controller : MonoBehaviour
     public GameObject magick_ball;
 
     Player player;
+    float defaultSpeed;
+    float defaultMaxSpeed;
+    float defaultJumpPower;
     Rigidbody2D rb;
     Vector2 move;
     float horizontal;
     void Start()
     {
         player = new Player(10f, 1.5f, 2.3f);
+        defaultSpeed = player.speed;
+        defaultMaxSpeed = player.maxSpeed;
+        defaultJumpPower = player.jumpPower;
         rb = this.GetComponent<Rigidbody2D>();
         move = new Vector2(0, 0);
         horizontal = 0;
@@ -28,7 +34,7 @@ public class player_controller : MonoBehaviour
         move = new Vector2(move.x, rb.velocity.y);
         horizontal = Input.GetAxisRaw("Horizontal");
 
-        if (horizontal != 0)
+        if (horizontal != 0 && move.x < player.maxSpeed)
         {
             move += new Vector2(horizontal * player.speed * Time.deltaTime, 0);
 
@@ -88,5 +94,25 @@ public class player_controller : MonoBehaviour
         {
             return false;
         }
+    }
+
+    
+    public void slow(bool x)
+    {
+        if (x)
+        {
+            player.speed *= 0.3f;
+            player.maxSpeed *= 0.3f;
+            player.jumpPower *= 0.3f;
+            Debug.Log("Slowed!");
+        }
+        else
+        {
+            player.speed = defaultSpeed;
+            player.maxSpeed = defaultMaxSpeed;
+            player.jumpPower = defaultJumpPower;
+            Debug.Log("You are free!");
+        }
+        
     }
 }
