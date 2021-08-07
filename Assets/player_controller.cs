@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class player_controller : MonoBehaviour
 {
+    public GameObject pointer;
+    public Camera camera;
+    public GameObject[] pointer_trail;
+    public GameObject magick_ball;
+
     Player player;
     Rigidbody2D rb;
     Vector2 move;
@@ -14,6 +19,8 @@ public class player_controller : MonoBehaviour
         rb = this.GetComponent<Rigidbody2D>();
         move = new Vector2(0, 0);
         horizontal = 0;
+
+        Cursor.visible = false;
     }
 
     void Update()
@@ -49,6 +56,24 @@ public class player_controller : MonoBehaviour
         }
         
         rb.velocity = move;
+
+        //UI stuff
+        Vector3 mousePos = camera.ScreenToWorldPoint(Input.mousePosition);
+        pointer.transform.position = new Vector3(mousePos.x, mousePos.y, 0);
+
+        for(int i = 0; i < pointer_trail.Length; i++)
+        {
+            pointer_trail[i].transform.position = transform.position + ((pointer.transform.position - transform.position).normalized * 0.08f * (1 + ((i + 1) * 0.3f)));
+        }
+
+        //magick test
+        if (Input.GetButtonDown("Fire1"))
+        {
+            GameObject mb = GameObject.Instantiate(magick_ball);
+            mb.transform.position = pointer_trail[0].transform.position;
+            Vector2 pointerDir = (pointer.transform.position - transform.position).normalized;
+            mb.GetComponent<Rigidbody2D>().velocity = pointerDir * 2;
+        }
     }
 
     bool grounded()

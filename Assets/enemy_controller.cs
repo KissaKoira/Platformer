@@ -25,7 +25,6 @@ public class enemy_controller : MonoBehaviour
         move = new Vector2(move.x, rb.velocity.y);
 
         horizontal = Mathf.Sign(player.transform.position.x - transform.position.x);
-        Debug.Log(horizontal);
 
         if (horizontal != 0)
         {
