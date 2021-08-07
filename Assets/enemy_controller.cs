@@ -2,27 +2,38 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class character_controller : MonoBehaviour
+public class enemy_controller : MonoBehaviour
 {
-    Player player;
+    Player enemy;
+    GameObject player;
+
     Rigidbody2D rb;
     Vector2 move;
+    float horizontal;
     void Start()
     {
-        player = new Player(10f, 1.5f);
+        enemy = new Player(7f, 1.2f, 2.3f);
+        player = GameObject.Find("player");
+
         rb = this.GetComponent<Rigidbody2D>();
         move = new Vector2(0, 0);
+        horizontal = 0;
     }
 
     void Update()
     {
         move = new Vector2(move.x, rb.velocity.y);
 
-        if (Input.GetAxisRaw("Horizontal") != 0)
+        horizontal = Mathf.Sign(player.transform.position.x - transform.position.x);
+        Debug.Log(horizontal);
+
+        if (horizontal != 0)
         {
-            if (Mathf.Abs(move.x) < player.maxSpeed)
+            move += new Vector2(horizontal * enemy.speed * Time.deltaTime, 0);
+
+            if (Mathf.Abs(move.x) > enemy.maxSpeed)
             {
-                move += new Vector2(Input.GetAxisRaw("Horizontal") * player.speed * Time.deltaTime, 0);
+                move = new Vector2(enemy.maxSpeed * horizontal, move.y);
             }
         }
         else
@@ -33,15 +44,15 @@ public class character_controller : MonoBehaviour
             }
             else
             {
-                move = new Vector2((Mathf.Abs(move.x) - (player.speed * Time.deltaTime)) * Mathf.Sign(move.x), move.y);
+                move = new Vector2((Mathf.Abs(move.x) - (enemy.speed * Time.deltaTime)) * Mathf.Sign(move.x), move.y);
             }
             
         }
 
-        if (Input.GetButtonDown("Jump") && grounded())
+        /*if (Input.GetButtonDown("Jump") && grounded())
         {
-            move = new Vector2(move.x, 2.5f);
-        }
+            move = new Vector2(move.x, enemy.jumpPower);
+        }*/
         
         rb.velocity = move;
     }
