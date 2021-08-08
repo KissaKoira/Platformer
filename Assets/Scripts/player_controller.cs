@@ -6,6 +6,7 @@ public class player_controller : MonoBehaviour
 {
     public GameObject pointer;
     public Camera camera;
+    public GameObject camera_point;
     public GameObject[] pointer_trail;
     public GameObject magick_ball;
 
@@ -72,6 +73,23 @@ public class player_controller : MonoBehaviour
             pointer_trail[i].transform.position = transform.position + ((pointer.transform.position - transform.position).normalized * 0.08f * (1 + ((i + 1) * 0.3f)));
         }
 
+        //Camera
+        /*Debug.Log((pointer.transform.position - transform.position).magnitude);
+
+        if ((pointer.transform.position - transform.position).magnitude > 0.35f)
+        {
+            camera_point.transform.position = transform.position + ((pointer.transform.position - transform.position).normalized * 0.35f);
+        }
+        else
+        {
+            camera_point.transform.position = pointer.transform.position;
+        }
+        
+        float step = (camera_point.transform.position - camera.transform.position).magnitude;
+
+        camera.transform.position = Vector2.MoveTowards(camera.transform.position, camera_point.transform.position, step * 0.5f * Time.deltaTime);
+        camera.transform.position = new Vector3(camera.transform.position.x, camera.transform.position.y, -10);
+        */
         //magick test
         if (Input.GetButtonDown("Fire1"))
         {
